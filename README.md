@@ -9,9 +9,9 @@
 
 Before you can run the project, make sure you have the following installed:
 
-1. **Python 3.x** (preferably 3.8 or above)
-2. **pip** (Python package installer)
-3. **Virtualenv** (Optional but recommended for environment isolation)
+- **Python 3.x** (preferably 3.8 or above)
+- **pip** (Python package installer)
+- **Virtualenv** (Optional but recommended for environment isolation)
 
 ---
 
@@ -121,10 +121,8 @@ krishimitra/
 
 - Ensure that your Python version is compatible with the dependencies.
 
----
+
 
 ## 📢 Contributing
 
 Feel free to fork the project, make changes, and submit pull requests. Contributions are always welcome!
-
-README!
