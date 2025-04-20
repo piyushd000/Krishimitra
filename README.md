@@ -9,7 +9,7 @@
 
 Before you can run the project, make sure you have the following installed:
 
-- **Python 3.x** (preferably 3.8 or above)
+- **Python 3.13.3** (preferably 3.8 or above)
 - **pip** (Python package installer)
 - **Virtualenv** (Optional but recommended for environment isolation)
 
@@ -92,7 +92,7 @@ Open your web browser and go to **http://127.0.0.1:5000** to interact with the p
 Here’s the layout of the project directory:
 
 ```
-krishimitra/
+app/
 │
 ├── app.py             # Main Flask application file
 ├── templates/         # HTML files (e.g., index.html)
