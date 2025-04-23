@@ -3,8 +3,7 @@ __pycache__/
 *.pyc
 .DS_Store
 .env
-# Ignore dataset folder
-data/
+node_modules/
 
 # Ignore zip files
 *.zip

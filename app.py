@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, redirect, url_for
 from flask_cors import CORS
 import os
 
@@ -6,10 +6,14 @@ app = Flask(__name__, static_folder='dist', static_url_path='/')
 CORS(app)
 
 # Route for Home Page
-@app.route('/', defaults={'path': 'index.html'})
-@app.route('/home', defaults={'path': 'index.html'})
-def serve_home(path):
-    return send_from_directory(app.static_folder, path)
+@app.route('/')
+def serve_index():
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/home')
+def redirect_home():
+    return redirect(url_for('serve_index'))
+
 
 # Route for Upload Page
 @app.route('/upload')
