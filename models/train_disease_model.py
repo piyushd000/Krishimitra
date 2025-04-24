@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
 
 # Paths
-data_dir = 'data/PlantVillage'        # Correct path to your dataset
+data_dir = "data/PlantVillage"   # Correct path to your dataset
 model_path = 'models/disease_model.pth'  # Save the model here
 
 # Data Transforms

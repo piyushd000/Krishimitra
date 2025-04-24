@@ -18,6 +18,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
               <a href="/" className="hover:bg-green-700 px-3 py-2 rounded-md">Home</a>
               <a href="/upload" className="hover:bg-green-700 px-3 py-2 rounded-md">Upload</a>
+              <a href="/Prediction" className="hover:bg-green-700 px-3 py-2 rounded-md">Predict</a>
               <a href="/dashboard" className="hover:bg-green-700 px-3 py-2 rounded-md">Dashboard</a>
               <a href="/about" className="hover:bg-green-700 px-3 py-2 rounded-md">About Us</a>
               <a href="/contact" className="hover:bg-green-700 px-3 py-2 rounded-md">Contact</a>
@@ -39,6 +40,7 @@ const Navbar = () => {
             <div className="flex flex-col space-y-2 px-2 pt-2 pb-3">
               <a href="/" className="hover:bg-green-700 px-3 py-2 rounded-md">Home</a>
               <a href="/upload" className="hover:bg-green-700 px-3 py-2 rounded-md">Upload</a>
+              <a href="/prediction" className="hover:bg-green-700 px-3 py-2 rounded-md">Predict</a>
               <a href="/dashboard" className="hover:bg-green-700 px-3 py-2 rounded-md">Dashboard</a>
               <a href="/about" className="hover:bg-green-700 px-3 py-2 rounded-md">About Us</a>
               <a href="/contact" className="hover:bg-green-700 px-3 py-2 rounded-md">Contact</a>
