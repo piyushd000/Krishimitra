@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Auth from './pages/Auth';
+import Prediction from './pages/Prediction';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Upload" element={<Upload />} />
+            <Route path="/Prediction" element={<Prediction />} />
             <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/About" element={<About />} />
             <Route path="/Contact" element={<Contact />} />

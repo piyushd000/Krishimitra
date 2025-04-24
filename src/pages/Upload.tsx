@@ -4,6 +4,9 @@ import { Upload as UploadIcon } from 'lucide-react';
 const Upload = () => {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [prediction, setPrediction] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -19,16 +22,47 @@ const Upload = () => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setSelectedFile(e.dataTransfer.files[0]);
+      const file = e.dataTransfer.files[0];
+      setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
+      setPrediction(null);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
+      setPrediction(null);
+    }
+  };
+
+  const handleAnalyze = async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      setLoading(true);
+      const response = await fetch("http://127.0.0.1:5000/load", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setPrediction(data.prediction);
+      } else {
+        setPrediction("Error: " + data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      setPrediction("Prediction failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,7 +74,7 @@ const Upload = () => {
           <p className="text-gray-600">Upload your crop images for instant disease detection</p>
         </div>
 
-        <div 
+        <div
           className={`border-2 border-dashed rounded-lg p-12 ${
             dragActive ? "border-green-500 bg-green-50" : "border-gray-300"
           } text-center`}
@@ -56,7 +90,7 @@ const Upload = () => {
             accept="image/*"
             onChange={handleChange}
           />
-          
+
           <label htmlFor="file-upload" className="cursor-pointer">
             <UploadIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <p className="text-lg text-gray-600 mb-2">
@@ -68,14 +102,33 @@ const Upload = () => {
           </label>
 
           {selectedFile && (
-            <button 
+            <button
               className="mt-6 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors"
-              onClick={() => {/* Handle upload logic */}}
+              onClick={handleAnalyze}
+              disabled={loading}
             >
-              Analyze Image
+              {loading ? "Analyzing..." : "Analyze Image"}
             </button>
           )}
         </div>
+
+        {imagePreview && (
+          <div className="mt-8 text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Preview</h2>
+            <img
+              src={imagePreview}
+              alt="Uploaded preview"
+              className="mx-auto rounded-md shadow-md max-h-64"
+            />
+          </div>
+        )}
+
+        {prediction && (
+          <div className="mt-8 text-center">
+            <h2 className="text-xl font-semibold text-gray-800">Prediction:</h2>
+            <p className="text-lg text-green-700 mt-2">{prediction}</p>
+          </div>
+        )}
 
         <div className="mt-8">
           <h2 className="text-xl font-semibold mb-4">Supported Formats</h2>
