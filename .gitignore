@@ -2,7 +2,10 @@ venv/
 __pycache__/
 *.pyc
 .DS_Store
+<<<<<<< HEAD
 .env
+=======
+>>>>>>> f415b1ba3b645dcf85a16e81dc55318e5de3ff34
 node_modules/
 
 # Ignore zip files
