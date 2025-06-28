@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Auth from './pages/Auth';
+import Prediction from './pages/Prediction';
 
 function App() {
   return (
@@ -18,11 +19,12 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/upload" element={<Upload />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Auth />} />
+            <Route path="/Upload" element={<Upload />} />
+            <Route path="/Prediction" element={<Prediction />} />
+            <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/About" element={<About />} />
+            <Route path="/Contact" element={<Contact />} />
+            <Route path="/Login" element={<Auth />} />
           </Routes>
         </main>
 
