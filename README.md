@@ -1,4 +1,5 @@
-
+(Work under progress!)
+The guide may or may not work
 # Krishimitra - AI-Based Crop Detection
 
 **Krishimitra** is an AI-powered crop detection system that helps farmers identify diseases, pests, and other crop issues using machine learning. This guide will walk you through the steps to set up and run the project locally.
