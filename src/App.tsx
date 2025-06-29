@@ -9,28 +9,29 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Auth from './pages/Auth';
 import Prediction from './pages/Prediction';
+import { UserProvider } from './pages/UserContext'; // ✅ Import UserProvider
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/Upload" element={<Upload />} />
-            <Route path="/Prediction" element={<Prediction />} />
-            <Route path="/Dashboard" element={<Dashboard />} />
-            <Route path="/About" element={<About />} />
-            <Route path="/Contact" element={<Contact />} />
-            <Route path="/Login" element={<Auth />} />
-          </Routes>
-        </main>
-
-        <Footer />
-      </div>
-    </Router>
+    <UserProvider> {/* ✅ Wrap the entire app here */}
+      <Router>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/Upload" element={<Upload />} />
+              <Route path="/Prediction" element={<Prediction />} />
+              <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/About" element={<About />} />
+              <Route path="/Contact" element={<Contact />} />
+              <Route path="/Login" element={<Auth />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </UserProvider>
   );
 }
 

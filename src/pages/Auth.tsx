@@ -1,13 +1,79 @@
 import React, { useState } from 'react';
 import { Mail, Lock, User } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
+import { useUser } from '../pages/UserContext'; // adjust path if needed
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const { setUser } = useUser(); // ✅ Get setUser from context
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle authentication
+    const form = new FormData(e.target as HTMLFormElement);
+    const payload = {
+      email: form.get('email'),
+      password: form.get('password'),
+      name: form.get('name'),
+    };
+
+    const url = isLogin ? 'login' : 'signup';
+
+    try {
+      const res = await fetch(`http://localhost:5000/${url}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(data.message);
+        localStorage.setItem('token', data.token);
+
+        if (data.name) {
+          localStorage.setItem('name', data.name);
+          setUser(data.name); // ✅ Set user in context
+        }
+
+        window.location.href = '/';
+      } else {
+        alert(data.error || 'Login/signup failed');
+      }
+    } catch (err) {
+      console.error('Error during authentication:', err);
+      alert('Something went wrong during login/signup!');
+    }
   };
+
+  const handleGoogleLoginSuccess = async (credentialResponse: any) => {
+    try {
+      const res = await fetch('http://localhost:5000/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: credentialResponse.credential }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message);
+        localStorage.setItem('token', data.token);
+
+        if (data.name) {
+          localStorage.setItem('name', data.name);
+          setUser(data.name); // ✅ Set user in context from Google login
+        }
+
+        window.location.href = '/';
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Google login failed');
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -116,10 +182,36 @@ const Auth = () => {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
-                  {isLogin ? "Don't have an account?" : "Already have an account?"}
-                </span>
+                <span className="px-2 bg-white text-gray-500">OR</span>
               </div>
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <GoogleLogin
+                onSuccess={async (credentialResponse) => {
+                  try {
+                    const res = await fetch('http://localhost:5000/google-login', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ token: credentialResponse.credential }),
+                    });
+
+                    const data = await res.json();
+                    if (res.ok) {
+                      alert(data.message);
+                      localStorage.setItem('token', data.token);
+                    } else {
+                      alert(data.error);
+                    }
+                  } catch (error) {
+                    console.error(error);
+                    alert('Google Login Failed');
+                  }
+                }}
+                onError={() => {
+                  alert('Google Sign-In failed.');
+                }}
+              />
             </div>
 
             <div className="mt-6 text-center">
@@ -138,3 +230,4 @@ const Auth = () => {
 };
 
 export default Auth;
+// Note: Replace 'YOUR_GOOGLE_CLIENT_ID' with your actual Google Client ID in main.tsx

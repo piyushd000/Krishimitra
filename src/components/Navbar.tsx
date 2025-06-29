@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Menu, X, Leaf } from 'lucide-react';
+import { useUser } from '../pages/UserContext'; // adjust path if needed
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const { user, setUser } = useUser();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    navigate('/login');
+  };
 
   return (
     <nav className="bg-green-600 text-white">
@@ -12,7 +23,7 @@ const Navbar = () => {
             <Leaf className="h-8 w-8" />
             <span className="ml-2 text-xl font-bold">KrishiMitra</span>
           </div>
-          
+
           {/* Desktop Menu */}
           <div className="hidden md:block">
             <div className="flex items-center space-x-4">
@@ -22,7 +33,16 @@ const Navbar = () => {
               <a href="/dashboard" className="hover:bg-green-700 px-3 py-2 rounded-md">Dashboard</a>
               <a href="/about" className="hover:bg-green-700 px-3 py-2 rounded-md">About Us</a>
               <a href="/contact" className="hover:bg-green-700 px-3 py-2 rounded-md">Contact</a>
-              <a href="/login" className="bg-white text-green-600 px-4 py-2 rounded-md font-medium hover:bg-green-50">Login</a>
+              {user ? (
+                <>
+                  <span className="bg-white text-green-600 px-4 py-2 rounded-md font-medium">{user}</span>
+                  <button onClick={handleLogout} className="ml-2 bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <a href="/login" className="bg-white text-green-600 px-4 py-2 rounded-md font-medium hover:bg-green-50">Login</a>
+              )}
             </div>
           </div>
 
@@ -44,7 +64,16 @@ const Navbar = () => {
               <a href="/dashboard" className="hover:bg-green-700 px-3 py-2 rounded-md">Dashboard</a>
               <a href="/about" className="hover:bg-green-700 px-3 py-2 rounded-md">About Us</a>
               <a href="/contact" className="hover:bg-green-700 px-3 py-2 rounded-md">Contact</a>
-              <a href="/login" className="bg-white text-green-600 px-4 py-2 rounded-md font-medium hover:bg-green-50 text-center">Login</a>
+              {user ? (
+                <>
+                  <span className="bg-white text-green-600 px-4 py-2 rounded-md font-medium text-center">{user}</span>
+                  <button onClick={handleLogout} className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 text-center">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <a href="/login" className="bg-white text-green-600 px-4 py-2 rounded-md font-medium hover:bg-green-50 text-center">Login</a>
+              )}
             </div>
           </div>
         )}

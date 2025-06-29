@@ -5,10 +5,18 @@ import numpy as np
 from PIL import Image
 import joblib
 import tensorflow as tf
+from werkzeug.security import generate_password_hash, check_password_hash
+from google.oauth2 import id_token
+from google.auth.transport import requests as grequests
+from flask_sqlalchemy import SQLAlchemy
+
+
+
 
 # ---- Flask App Setup ----
 app = Flask(__name__, static_folder='dist', static_url_path='/')
-CORS(app)
+CORS(app, supports_credentials=True)
+
 
 # ---- Load TFLite Interpreter ----
 TFLITE_MODEL_PATH = "models/model.tflite"
@@ -172,6 +180,85 @@ def predict_environment():
         return jsonify({"error": f"Missing input field: {str(e)}"}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:piyush%4012345@localhost:5432/users'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(200))
+    provider = db.Column(db.String(20), default='email')  # 'email' or 'google'
+
+with app.app_context():
+    db.create_all()
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.json
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({'error': 'User already exists'}), 400
+    hashed = generate_password_hash(data['password'])
+    user = User(name=data['name'], email=data['email'], password=hashed)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'message': 'Signup successful', 'token': 'dummy-token'}), 200
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    user = User.query.filter_by(email=data['email']).first()
+    if user and check_password_hash(user.password, data['password']):
+        return jsonify({'message': 'Login successful', 'token': 'dummy-token'}), 200
+    return jsonify({'error': 'Invalid credentials'}), 401
+
+
+
+# Optional: move this to your config or .env
+GOOGLE_CLIENT_ID = "691182636344-stgmho1mfkrhpkulg4652vv8g44242ri.apps.googleusercontent.com"
+
+@app.route('/google-login', methods=['POST'])
+def google_login():
+    token = request.json.get('token')
+
+    if not token:
+        return jsonify({'error': 'Token is missing'}), 400
+
+    try:
+        # Verify the ID token using Google's OAuth2 client
+        idinfo = id_token.verify_oauth2_token(token, grequests.Request(), GOOGLE_CLIENT_ID)
+
+   
+
+        email = idinfo.get('email')
+        name = idinfo.get('name', 'No Name')
+
+        if not email:
+            return jsonify({'error': 'Email not found in token'}), 400
+
+        # Check if user already exists
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            user = User(name=name, email=email, provider='google')
+            db.session.add(user)
+            db.session.commit()
+
+        # Return token + name so frontend can show it
+        return jsonify({'message': 'Google login successful', 'token': token, 'name': name}), 200
+
+
+    except ValueError as ve:
+        print(f"[Google Login Error] Invalid token: {ve}")
+        return jsonify({'error': 'Invalid Google token'}), 400
+    except Exception as e:
+        print(f"[Google Login Error] Unexpected error: {e}")
+        return jsonify({'error': 'Server error during token verification'}), 500
+
+
+
+
 
 # ---- Start Flask App ----
 if __name__ == "__main__":
