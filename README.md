@@ -1,128 +1,151 @@
-
-# Krishimitra - AI-Based Crop Detection
-
-**Krishimitra** is an AI-powered crop detection system that helps farmers identify diseases, pests, and other crop issues using machine learning. This guide will walk you through the steps to set up and run the project locally.
+(Work under progress!)
+The guide may or may not work
 
 ---
 
-## 🚀 Prerequisites
+# 🌾 Krishimitra – AI-Based Crop Detection System
 
-Before you can run the project, make sure you have the following installed:
-
-- **Python 3.13.3** (preferably 3.8 or above)
-- **pip** (Python package installer)
-- **Virtualenv** (Optional but recommended for environment isolation)
+**Krishimitra** is an AI-powered solution designed to help farmers detect crop diseases, pest infestations, and other issues using deep learning and computer vision. This guide walks you through setting up and running the project locally.
 
 ---
 
-## 🛠️ Setup Instructions
+## ✅ Prerequisites
 
-Follow the steps below to set up the project on your local machine:
+Ensure you have the following tools installed:
+
+* **Python 3.11**
+* **pip** – Python package manager
+* **Node.js & npm** – for frontend dependencies
+* **Anaconda** *(optional, required if Python 3.11 is not installed)*
+
+---
+
+## ⚙️ Setup Instructions
 
 ### 1. Clone the Repository
 
-Start by cloning the repository to your local machine:
-
 ```bash
-git clone https://github.com/your-username/krishimitra.git
-```
-
-Replace `your-username` with your actual GitHub username.
-
-### 2. Navigate to Project Directory
-
-Move into the project directory:
-
-```bash
+git clone https://github.com/piyushd000/krishimitra.git
 cd krishimitra
 ```
 
-### 3. Create a Virtual Environment (Optional)
 
-Create a virtual environment to keep dependencies isolated:
+### 2. Set Up Python 3.11 Environment
+
+> ✅ **Option 1** – *If you already have Python 3.11 installed*:
 
 ```bash
 python -m venv venv
 ```
 
-Activate the virtual environment:
+* **Windows**:
 
-- On **Windows**:
   ```bash
   .\venv\Scripts\activate
   ```
+* **macOS/Linux**:
 
-- On **Mac/Linux**:
   ```bash
   source venv/bin/activate
   ```
 
-### 4. Install Dependencies
+> 🛠 **Option 2** – *If you do not have Python 3.11 installed*:
 
-Install the required packages using **pip**:
+Use **Anaconda** to create a virtual environment with Python 3.11:
+
+```bash
+conda create -n krishienv python=3.11
+conda activate krishienv
+```
+
+---
+
+### 3. Install Python Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-This will install all the necessary libraries like Flask, TensorFlow, OpenCV, etc.
+---
+
+### 4. Install Frontend Dependencies (npm)
+
+Make sure you are in the root directory and run:
+
+```bash
+npm install
+```
+
+Then, build the frontend:
+
+```bash
+npm run build
+```
 
 ---
 
-## ⚡ Running the Project Locally
+## 🚀 Run the Project Locally
 
-### 1. Start the Flask Server
-
-Run the following command to start the Flask development server:
+Once the backend and frontend dependencies are set up:
 
 ```bash
 python app.py
 ```
 
-By default, the application will run on **http://127.0.0.1:5000**.
-
-### 2. Access the Web Interface
-
-Open your web browser and go to **http://127.0.0.1:5000** to interact with the project.
+The server will start at: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
-## 📝 Project Structure
-
-Here’s the layout of the project directory:
+## 🗂️ Project Structure
 
 ```
-app/
+krishimitra/
 │
-├── app.py             # Main Flask application file
-├── templates/         # HTML files (e.g., index.html)
-├── static/            # Static files (CSS, JS)
-├── utils/             # Utility functions (e.g., crop detection logic)
-├── requirements.txt   # Python dependencies
-└── .gitignore         # Git ignore file
+├── app.py               # Main Flask application
+├── requirements.txt     # Python dependencies
+├── templates/           # HTML files (UI)
+├── static/              # CSS, JS, and image assets
+├── utils/               # ML logic and helper functions
+├── package.json         # npm dependencies
+├── .gitignore
+└── ...
 ```
 
 ---
 
-## 📌 Additional Notes
+## 📎 Notes
 
-- If you encounter any issues or need to stop the Flask server, press **Ctrl+C** in your terminal.
-- The project uses machine learning models that require training data. Make sure the data is available or pre-trained models are present in the `utils/` folder.
+* Place any **pretrained models** or **datasets** inside the `utils/` directory.
+* Press **Ctrl+C** in the terminal to stop the Flask server.
+* Make sure Node.js is properly installed for `npm run build` to succeed.
 
 ---
 
-## 🛠️ Troubleshooting
+## 🧰 Troubleshooting
 
-- If you see issues with missing dependencies, run:
+* Upgrade pip if needed:
+
   ```bash
   pip install --upgrade pip
+  ```
+
+* Reinstall requirements:
+
+  ```bash
   pip install -r requirements.txt
   ```
 
-- Ensure that your Python version is compatible with the dependencies.
+* If `npm install` fails, try deleting `node_modules` and reinstall:
 
+  ```bash
+  rm -rf node_modules
+  npm install
+  ```
 
+---
 
-## 📢 Contributing
+## 🤝 Contributing
 
-Feel free to fork the project, make changes, and submit pull requests. Contributions are always welcome!
+We welcome contributions! Fork the repo, create a new branch, make your changes, and submit a pull request.
+
+---
