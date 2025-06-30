@@ -4,7 +4,7 @@ import { Thermometer, Droplets, Cloud, Sun, Loader2, Leaf } from 'lucide-react';
 import { state_arr, s_a } from '../data/cities';
 import { useScan } from '../pages/ScanContext';
 
-const OPENWEATHER_API_KEY = "67cb79fed8399fa72a16287f9d7c977d";
+const OPENWEATHER_API_KEY = "";
 
 interface WeatherData {
   temperature: number;
