@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
-import { Menu, X, Leaf } from 'lucide-react';
-import { useUser } from '../pages/UserContext'; // adjust path if needed
+import React from 'react';
+import { Menu, X, Leaf, LogOut } from 'lucide-react';
+import { useUser } from '../pages/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user, setUser } = useUser();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const { user, logout } = useUser();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setUser(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('name');
-    navigate('/login');
+    logout();
+    navigate('/');
   };
 
   return (
@@ -23,25 +21,32 @@ const Navbar = () => {
             <Leaf className="h-8 w-8" />
             <span className="ml-2 text-xl font-bold">KrishiMitra</span>
           </div>
-
+          
           {/* Desktop Menu */}
           <div className="hidden md:block">
             <div className="flex items-center space-x-4">
               <a href="/" className="hover:bg-green-700 px-3 py-2 rounded-md">Home</a>
               <a href="/upload" className="hover:bg-green-700 px-3 py-2 rounded-md">Upload</a>
-              <a href="/Prediction" className="hover:bg-green-700 px-3 py-2 rounded-md">Predict</a>
-              <a href="/dashboard" className="hover:bg-green-700 px-3 py-2 rounded-md">Dashboard</a>
+              <a href="/prediction" className="hover:bg-green-700 px-3 py-2 rounded-md">Predict</a>
+              {user && (
+                <a href="/dashboard" className="hover:bg-green-700 px-3 py-2 rounded-md">Dashboard</a>
+              )}
               <a href="/about" className="hover:bg-green-700 px-3 py-2 rounded-md">About Us</a>
               <a href="/contact" className="hover:bg-green-700 px-3 py-2 rounded-md">Contact</a>
+              
               {user ? (
-                <>
-                  <span className="bg-white text-green-600 px-4 py-2 rounded-md font-medium">{user}</span>
-                  <button onClick={handleLogout} className="ml-2 bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600">
+                <div className="ml-auto flex items-center space-x-2 text-Blue font-bold">
+                  <span className="text-Black-200">Welcome, {user}</span>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md font-medium flex items-center"
+                  >
+                    <LogOut className="h-4 w-4 mr-1" />
                     Logout
                   </button>
-                </>
+                </div>
               ) : (
-                <a href="/login" className="bg-white text-green-600 px-4 py-2 rounded-md font-medium hover:bg-green-50">Login</a>
+                <a href="/login" className="bg-white text-green-600 px-6 py-2 rounded-md font-medium hover:bg-green-50">Login</a>
               )}
             </div>
           </div>
@@ -61,16 +66,23 @@ const Navbar = () => {
               <a href="/" className="hover:bg-green-700 px-3 py-2 rounded-md">Home</a>
               <a href="/upload" className="hover:bg-green-700 px-3 py-2 rounded-md">Upload</a>
               <a href="/prediction" className="hover:bg-green-700 px-3 py-2 rounded-md">Predict</a>
-              <a href="/dashboard" className="hover:bg-green-700 px-3 py-2 rounded-md">Dashboard</a>
+              {user && (
+                <a href="/dashboard" className="hover:bg-green-700 px-3 py-2 rounded-md">Dashboard</a>
+              )}
               <a href="/about" className="hover:bg-green-700 px-3 py-2 rounded-md">About Us</a>
               <a href="/contact" className="hover:bg-green-700 px-3 py-2 rounded-md">Contact</a>
+              
               {user ? (
-                <>
-                  <span className="bg-white text-green-600 px-4 py-2 rounded-md font-medium text-center">{user}</span>
-                  <button onClick={handleLogout} className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 text-center">
+                <div className="border-t border-green-500 pt-2">
+                  <div className="px-3 py-2 text-sm">Welcome, {user}</div>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md font-medium text-center w-full flex items-center justify-center"
+                  >
+                    <LogOut className="h-4 w-4 mr-1" />
                     Logout
                   </button>
-                </>
+                </div>
               ) : (
                 <a href="/login" className="bg-white text-green-600 px-4 py-2 rounded-md font-medium hover:bg-green-50 text-center">Login</a>
               )}

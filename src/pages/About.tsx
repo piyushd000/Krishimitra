@@ -65,7 +65,7 @@ const About = () => {
               <p className="text-gray-500 text-sm">Expert in Web Application Development</p>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6">
-              <img src="https://i.ibb.co/9kx1sk0x/formal.jpg" alt="Team member" className="w-32 h-32 rounded-full mx-auto mb-4 object-cover" />
+              <img src="https://media.licdn.com/dms/image/v2/D5603AQEX-t6JeW6zpg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1724161543543?e=1756944000&v=beta&t=WtplNt_Gy0-TKUbt9SiIUyStzJFNnOVMLqaxNd3vNNU" alt="Team member" className="w-32 h-32 rounded-full mx-auto mb-4 object-cover" />
               <h3 className="text-xl font-semibold mb-2">Abdul Kalam</h3>
               <p className="text-gray-600 mb-2">Front End Developer</p>
               <p className="text-gray-500 text-sm">Expert in React js</p>

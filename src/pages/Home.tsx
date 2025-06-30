@@ -14,9 +14,7 @@ function Home() {
             <p className="text-xl mb-8">
               Upload your crop images and get instant disease detection results
             </p>
-            <button className="bg-white text-green-600 px-8 py-3 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors">
-              Get Started
-            </button>
+              <a href="/upload" className="bg-white text-green-600 px-8 py-3 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors">Get Started</a>
           </div>
         </div>
       </section>

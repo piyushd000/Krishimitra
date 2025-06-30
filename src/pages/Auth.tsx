@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Lock, User } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
-import { useUser } from '../pages/UserContext'; // adjust path if needed
+import { useUser } from '../pages/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const { setUser } = useUser(); // ✅ Get setUser from context
+  const { setUser } = useUser();
+  const navigate = useNavigate();
+  const [redirectAfterLogin, setRedirectAfterLogin] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,13 +33,15 @@ const Auth = () => {
       if (res.ok) {
         alert(data.message);
         localStorage.setItem('token', data.token);
+        
 
-        if (data.name) {
-          localStorage.setItem('name', data.name);
-          setUser(data.name); // ✅ Set user in context
+        //changed
+        const nameToSet = data.name || (payload.name as string);
+        if (nameToSet) {
+          localStorage.setItem('name', nameToSet);
+          setUser(nameToSet);
+          setRedirectAfterLogin(true); // Will trigger redirect after re-render
         }
-
-        window.location.href = '/';
       } else {
         alert(data.error || 'Login/signup failed');
       }
@@ -61,10 +66,9 @@ const Auth = () => {
 
         if (data.name) {
           localStorage.setItem('name', data.name);
-          setUser(data.name); // ✅ Set user in context from Google login
+          setUser(data.name);
+          setRedirectAfterLogin(true); // Delayed navigation
         }
-
-        window.location.href = '/';
       } else {
         alert(data.error);
       }
@@ -74,6 +78,12 @@ const Auth = () => {
     }
   };
 
+  // 🚀 Navigate only after context update
+  useEffect(() => {
+    if (redirectAfterLogin) {
+      navigate('/dashboard');
+    }
+  }, [redirectAfterLogin, navigate]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -115,7 +125,6 @@ const Auth = () => {
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
                   required
                   className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
@@ -134,7 +143,6 @@ const Auth = () => {
                   id="password"
                   name="password"
                   type="password"
-                  autoComplete="current-password"
                   required
                   className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
@@ -157,7 +165,6 @@ const Auth = () => {
                     Remember me
                   </label>
                 </div>
-
                 <div className="text-sm">
                   <a href="#" className="font-medium text-green-600 hover:text-green-500">
                     Forgot your password?
@@ -169,10 +176,11 @@ const Auth = () => {
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
               >
                 {isLogin ? 'Sign in' : 'Sign up'}
               </button>
+              
             </div>
           </form>
 
@@ -188,26 +196,7 @@ const Auth = () => {
 
             <div className="mt-6 flex justify-center">
               <GoogleLogin
-                onSuccess={async (credentialResponse) => {
-                  try {
-                    const res = await fetch('http://localhost:5000/google-login', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ token: credentialResponse.credential }),
-                    });
-
-                    const data = await res.json();
-                    if (res.ok) {
-                      alert(data.message);
-                      localStorage.setItem('token', data.token);
-                    } else {
-                      alert(data.error);
-                    }
-                  } catch (error) {
-                    console.error(error);
-                    alert('Google Login Failed');
-                  }
-                }}
+                onSuccess={handleGoogleLoginSuccess}
                 onError={() => {
                   alert('Google Sign-In failed.');
                 }}
@@ -219,7 +208,7 @@ const Auth = () => {
                 onClick={() => setIsLogin(!isLogin)}
                 className="font-medium text-green-600 hover:text-green-500"
               >
-                {isLogin ? 'Sign up' : 'Sign in'}
+                {isLogin ? 'Need an account? Sign up' : 'Already have an account? Sign in'}
               </button>
             </div>
           </div>
@@ -230,4 +219,3 @@ const Auth = () => {
 };
 
 export default Auth;
-// Note: Replace 'YOUR_GOOGLE_CLIENT_ID' with your actual Google Client ID in main.tsx

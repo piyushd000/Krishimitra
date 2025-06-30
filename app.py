@@ -113,7 +113,7 @@ def serve_static(path):
 @app.route('/dashboard')
 @app.route('/upload')
 @app.route('/login')
-@app.route('/Prediction')
+@app.route('/prediction')
 def route_views():
     return send_from_directory(app.static_folder, 'index.html')
 
@@ -159,7 +159,7 @@ def load_disease():
         return jsonify({"error": str(e)}), 500
 
 # ---- Route: Environment-Based Crop Suggestion ----
-@app.route("/predict", methods=["POST"])
+@app.route("/prediction", methods=["POST"])
 def predict_environment():
     try:
         data = request.get_json()
@@ -181,7 +181,7 @@ def predict_environment():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:piyush%4012345@localhost:5432/users'
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://krishiuser:krishipass@localhost:5432/krishimitra"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -206,13 +206,19 @@ def signup():
     db.session.commit()
     return jsonify({'message': 'Signup successful', 'token': 'dummy-token'}), 200
 
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
     user = User.query.filter_by(email=data['email']).first()
     if user and check_password_hash(user.password, data['password']):
-        return jsonify({'message': 'Login successful', 'token': 'dummy-token'}), 200
+        return jsonify({
+            'message': 'Login successful',
+            'token': 'dummy-token',
+            'name': user.name  # ✅ Add name here
+        }), 200
     return jsonify({'error': 'Invalid credentials'}), 401
+
 
 
 
