@@ -181,7 +181,7 @@ def predict_environment():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://krishiuser:krishipass@localhost:5432/krishimitra"
+app.config['SQLALCHEMY_DATABASE_URI'] = ""
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -223,7 +223,7 @@ def login():
 
 
 # Optional: move this to your config or .env
-GOOGLE_CLIENT_ID = "691182636344-stgmho1mfkrhpkulg4652vv8g44242ri.apps.googleusercontent.com"
+GOOGLE_CLIENT_ID = ""
 
 @app.route('/google-login', methods=['POST'])
 def google_login():
