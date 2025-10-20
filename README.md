@@ -1,4 +1,7 @@
-(Work under progress!)
+
+Live at : https://krrishimitra.netlify.app/
+
+
 The guide may or may not work
 # Krishimitra - AI-Based Crop Detection
 
